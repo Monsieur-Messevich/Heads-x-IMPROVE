@@ -1,0 +1,120 @@
+void quickSort(int* array, int low, int high)
+{
+	int i = low;
+	int j = high;
+	int pivot = array[(i + j) / 2];
+	int temp;
+
+	while (i <= j)
+	{
+		while (array[i] < pivot)
+			i++;
+		while (array[j] > pivot)
+			j--;
+		if (i <= j)
+		{
+			temp = array[i];
+			array[i] = array[j];
+			array[j] = temp;
+			i++;
+			j--;
+		}
+	}
+	if (j > low)
+		quickSort(array, low, j);
+	if (i < high)
+		quickSort(array, i, high);
+}
+
+int** F(int n)
+{
+	int* Num_Mass_begin = new int[n];
+
+	Num_Mass_begin[0] = rand() + 1;
+	for (int i(1); i < n; i++)
+	{
+		Num_Mass_begin[i] = rand() + 1;
+		bool test = false;
+		while (test != true)
+		{
+			test = true;
+			for (int j(0); j < i; j++)
+			{
+				if (Num_Mass_begin[i] == Num_Mass_begin[j])
+				{
+					test = false;
+					Num_Mass_begin[i] = rand() + 1;
+					break;
+				}
+			}
+		}
+	}
+
+	////SORT////
+	if (n % 2 == 0)
+	{
+		int* Num_div2 = new int[n / 2];
+
+		for (int i(0), j(0); i < n; i+=2, j++)
+		{
+			Num_div2[j] = Num_Mass_begin[i];
+		}
+		quickSort(Num_div2, 0, n / 2 - 1);
+		for (int i(0), j(0); i < n; i += 2, j++)
+		{
+			Num_Mass_begin[i] = Num_div2[j];
+		}
+
+		for (int i(1), j(0); i < n; i += 2, j++)
+		{
+			Num_div2[j] = Num_Mass_begin[i];
+		}
+		quickSort(Num_div2, 0, n / 2 - 1);
+		for (int i(n-1), j(0); i > 0; i -= 2, j++)
+		{
+			Num_Mass_begin[i] = Num_div2[j];
+		}
+
+		delete [] Num_div2;
+	}
+	else
+	{
+		cout << n / 2 << endl << endl;
+		int* Num_non_div2 = new int[n / 2 + 1];
+
+		for (int i(0), j(0); i < n; i += 2, j++)
+		{
+			Num_non_div2[j] = Num_Mass_begin[i];
+		}
+		quickSort(Num_non_div2, 0, n / 2);
+		for (int i(0), j(0); i < n; i += 2, j++)
+		{
+			Num_Mass_begin[i] = Num_non_div2[j];
+		}
+
+		for (int i(1), j(0); i < n; i += 2, j++)
+		{
+			Num_non_div2[j] = Num_Mass_begin[i];
+		}
+		quickSort(Num_non_div2, 0, n / 2 - 1);
+		for (int i(n-2), j(0); i > 0; i -= 2, j++)
+		{
+			Num_Mass_begin[i] = Num_non_div2[j];
+		}
+		delete[] Num_non_div2;
+	}
+	////////////
+
+	int** Mass = new int*[n];
+	for (int i(0); i < n; i++)
+	{
+		Mass[i] = new int[Num_Mass_begin[i]];
+		for (int j(0); j < Num_Mass_begin[i]; j++)
+		{
+			Mass[i][j] = rand();
+		}
+	}
+	delete[] Num_Mass_begin;
+
+	return Mass;
+}
